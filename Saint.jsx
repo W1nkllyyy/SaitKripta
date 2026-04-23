@@ -1,0 +1,577 @@
+import React, { useState, useEffect, useRef } from 'react';
+import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { 
+  Zap, Brain, Shuffle, ArrowRight, Rocket, Shield, 
+  TrendingUp, Globe, Sparkles, ChevronRight, Mail,
+  Twitter, Github, Send, Activity, Lock
+} from 'lucide-react';
+
+export default function NeonexLanding() {
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 });
+  const containerRef = useRef(null);
+  const visualRef = useRef(null);
+  
+  const { scrollYProgress } = useScroll();
+  const bgY1 = useTransform(scrollYProgress, [0, 1], [0, -300]);
+  const bgY2 = useTransform(scrollYProgress, [0, 1], [0, -500]);
+  const bgY3 = useTransform(scrollYProgress, [0, 1], [0, -200]);
+
+  const mx = useMotionValue(0);
+  const my = useMotionValue(0);
+  const smx = useSpring(mx, { stiffness: 50, damping: 20 });
+  const smy = useSpring(my, { stiffness: 50, damping: 20 });
+
+  useEffect(() => {
+    const handleMove = (e) => {
+      setMousePos({ x: e.clientX, y: e.clientY });
+      mx.set((e.clientX / window.innerWidth - 0.5) * 40);
+      my.set((e.clientY / window.innerHeight - 0.5) * 40);
+    };
+    window.addEventListener('mousemove', handleMove);
+    return () => window.removeEventListener('mousemove', handleMove);
+  }, [mx, my]);
+
+  const tickerData = [
+    { sym: 'BTC', price: '68,432.12', change: '+2.34%', up: true },
+    { sym: 'ETH', price: '3,845.67', change: '+1.78%', up: true },
+    { sym: 'SOL', price: '198.45', change: '-0.92%', up: false },
+    { sym: 'AVAX', price: '42.18', change: '+3.21%', up: true },
+    { sym: 'MATIC', price: '1.24', change: '+0.88%', up: true },
+    { sym: 'LINK', price: '18.92', change: '-1.14%', up: false },
+    { sym: 'DOT', price: '8.76', change: '+2.05%', up: true },
+    { sym: 'ARB', price: '2.14', change: '+4.12%', up: true },
+  ];
+
+  const features = [
+    {
+      icon: Zap,
+      title: 'Ultra-fast Transactions',
+      desc: 'Sub-second finality powered by next-gen Layer-2 infrastructure. Experience lightning speed.',
+      size: 'md:col-span-2 md:row-span-1',
+      gradient: 'from-blue-500/20 to-transparent',
+      accent: '#3b82f6'
+    },
+    {
+      icon: Brain,
+      title: 'AI-driven Analytics',
+      desc: 'Predictive market intelligence at your fingertips.',
+      size: 'md:col-span-1 md:row-span-2',
+      gradient: 'from-purple-500/20 to-transparent',
+      accent: '#a855f7'
+    },
+    {
+      icon: Shuffle,
+      title: 'Cross-chain Bridge',
+      desc: 'Seamless transfers across 40+ blockchains.',
+      size: 'md:col-span-1 md:row-span-1',
+      gradient: 'from-fuchsia-500/20 to-transparent',
+      accent: '#d946ef'
+    },
+    {
+      icon: Shield,
+      title: 'Zero-Knowledge Privacy',
+      desc: 'Military-grade encryption.',
+      size: 'md:col-span-1 md:row-span-1',
+      gradient: 'from-cyan-500/20 to-transparent',
+      accent: '#06b6d4'
+    },
+    {
+      icon: TrendingUp,
+      title: 'Yield Optimizer',
+      desc: 'Automated strategies across DeFi protocols maximizing your returns in real-time.',
+      size: 'md:col-span-2 md:row-span-1',
+      gradient: 'from-indigo-500/20 to-transparent',
+      accent: '#6366f1'
+    },
+  ];
+
+  return (
+    <div ref={containerRef} className="relative min-h-screen bg-[#020202] text-white overflow-x-hidden font-sans">
+      {/* Global background glow orbs */}
+      <div className="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <motion.div 
+          style={{ y: bgY1 }}
+          className="absolute top-[10%] -left-40 w-[500px] h-[500px] rounded-full bg-blue-600/20 blur-[120px]"
+        />
+        <motion.div 
+          style={{ y: bgY2 }}
+          className="absolute top-[40%] -right-40 w-[600px] h-[600px] rounded-full bg-purple-600/20 blur-[140px]"
+        />
+        <motion.div 
+          style={{ y: bgY3 }}
+          className="absolute top-[80%] left-1/3 w-[400px] h-[400px] rounded-full bg-fuchsia-600/15 blur-[100px]"
+        />
+        {/* Grid overlay */}
+        <div 
+          className="absolute inset-0 opacity-[0.04]"
+          style={{
+            backgroundImage: `linear-gradient(rgba(255,255,255,.5) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,.5) 1px, transparent 1px)`,
+            backgroundSize: '60px 60px'
+          }}
+        />
+        {/* Cursor light */}
+        <div 
+          className="absolute w-[600px] h-[600px] rounded-full pointer-events-none transition-transform duration-300 ease-out"
+          style={{
+            background: 'radial-gradient(circle, rgba(168,85,247,0.08) 0%, transparent 70%)',
+            transform: `translate(${mousePos.x - 300}px, ${mousePos.y - 300}px)`,
+          }}
+        />
+      </div>
+
+      {/* Navigation */}
+      <motion.nav 
+        initial={{ y: -50, opacity: 0 }}
+        animate={{ y: 0, opacity: 1 }}
+        transition={{ duration: 0.8 }}
+        className="relative z-50 flex items-center justify-between px-6 md:px-12 py-6 backdrop-blur-md bg-black/20 border-b border-white/5"
+      >
+        <div className="flex items-center gap-2">
+          <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+            <Sparkles className="w-5 h-5 text-white" />
+          </div>
+          <span className="text-xl font-bold tracking-tight bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+            NEONEX
+          </span>
+        </div>
+        <div className="hidden md:flex items-center gap-8 text-sm text-white/70">
+          <a href="#" className="hover:text-white transition">Products</a>
+          <a href="#" className="hover:text-white transition">Markets</a>
+          <a href="#" className="hover:text-white transition">Ecosystem</a>
+          <a href="#" className="hover:text-white transition">Docs</a>
+        </div>
+        <button className="relative group px-5 py-2 rounded-full bg-white/5 border border-white/10 backdrop-blur-md text-sm hover:bg-white/10 transition">
+          Connect Wallet
+        </button>
+      </motion.nav>
+
+      {/* Hero */}
+      <section className="relative z-10 px-6 md:px-12 pt-20 pb-32 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 30 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1, delay: 0.2 }}
+          className="flex flex-col items-center text-center"
+        >
+          <motion.div
+            initial={{ opacity: 0, scale: 0.8 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ delay: 0.4 }}
+            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-purple-500/30 bg-purple-500/5 backdrop-blur-md mb-8"
+          >
+            <div className="w-2 h-2 rounded-full bg-purple-400 animate-pulse" />
+            <span className="text-xs text-purple-200 tracking-widest uppercase">Mainnet v3.0 is Live</span>
+          </motion.div>
+
+          <motion.h1 
+            className="text-5xl md:text-7xl lg:text-8xl font-bold tracking-tighter leading-[0.95] mb-6"
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 1, delay: 0.5 }}
+          >
+            <span className="block bg-gradient-to-r from-white via-white to-white/70 bg-clip-text text-transparent">
+              The Future of
+            </span>
+            <motion.span 
+              className="block bg-[linear-gradient(110deg,#3b82f6,#a855f7,#d946ef,#3b82f6)] bg-[length:200%_100%] bg-clip-text text-transparent"
+              animate={{ backgroundPosition: ['0% 50%', '200% 50%'] }}
+              transition={{ duration: 6, repeat: Infinity, ease: 'linear' }}
+            >
+              Decentralized Finance
+            </motion.span>
+          </motion.h1>
+
+          <motion.p 
+            className="max-w-2xl text-lg md:text-xl text-white/60 leading-relaxed mb-10"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            Trade, stake, and bridge assets on the most advanced decentralized exchange. 
+            Zero custody. Infinite possibilities. Built for the next billion.
+          </motion.p>
+
+          <motion.div 
+            className="flex flex-col sm:flex-row gap-4"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1 }}
+          >
+            <motion.button 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative group px-8 py-4 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 font-semibold overflow-hidden"
+            >
+              <motion.span
+                className="absolute inset-0 rounded-full"
+                style={{
+                  boxShadow: '0 0 40px rgba(139,92,246,0.6)',
+                }}
+                animate={{ 
+                  boxShadow: [
+                    '0 0 30px rgba(59,130,246,0.5)',
+                    '0 0 60px rgba(168,85,247,0.8)',
+                    '0 0 30px rgba(59,130,246,0.5)',
+                  ]
+                }}
+                transition={{ duration: 2.5, repeat: Infinity }}
+              />
+              <span className="relative flex items-center gap-2">
+                <Rocket className="w-4 h-4" />
+                Launch App
+                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+              </span>
+            </motion.button>
+            <button className="px-8 py-4 rounded-full bg-white/5 border border-white/10 backdrop-blur-md font-medium hover:bg-white/10 transition flex items-center gap-2 justify-center">
+              Read Whitepaper
+              <ChevronRight className="w-4 h-4" />
+            </button>
+          </motion.div>
+
+          {/* Hero Stats */}
+          <motion.div 
+            initial={{ opacity: 0, y: 40 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.2 }}
+            className="mt-20 grid grid-cols-2 md:grid-cols-4 gap-4 w-full max-w-4xl"
+          >
+            {[
+              { label: 'Total Volume', val: '$24.8B' },
+              { label: 'Active Users', val: '1.2M+' },
+              { label: 'Chains', val: '40+' },
+              { label: 'TVL', val: '$3.4B' },
+            ].map((s, i) => (
+              <div key={i} className="rounded-2xl p-5 bg-white/[0.03] border border-white/10 backdrop-blur-md">
+                <div className="text-2xl md:text-3xl font-bold bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">
+                  {s.val}
+                </div>
+                <div className="text-xs text-white/50 uppercase tracking-wider mt-1">{s.label}</div>
+              </div>
+            ))}
+          </motion.div>
+        </motion.div>
+      </section>
+
+      {/* Ticker */}
+      <div className="relative z-10 border-y border-white/10 bg-black/40 backdrop-blur-md overflow-hidden py-5">
+        <motion.div 
+          className="flex gap-12 whitespace-nowrap"
+          animate={{ x: [0, -1600] }}
+          transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+        >
+          {[...tickerData, ...tickerData, ...tickerData].map((t, i) => (
+            <div key={i} className="flex items-center gap-3 flex-shrink-0">
+              <Activity className="w-4 h-4 text-purple-400" />
+              <span className="font-mono font-bold text-white">{t.sym}</span>
+              <span className="font-mono text-white/70">${t.price}</span>
+              <span className={`font-mono text-sm ${t.up ? 'text-emerald-400' : 'text-rose-400'}`}>
+                {t.change}
+              </span>
+              <div className="w-1 h-1 rounded-full bg-white/20 ml-6" />
+            </div>
+          ))}
+        </motion.div>
+      </div>
+
+      {/* Features - Bento Grid */}
+      <section className="relative z-10 px-6 md:px-12 py-32 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="text-center mb-16"
+        >
+          <div className="text-xs uppercase tracking-[0.3em] text-purple-400 mb-4">Features</div>
+          <h2 className="text-4xl md:text-6xl font-bold tracking-tighter bg-gradient-to-r from-white to-white/50 bg-clip-text text-transparent">
+            Built for the new era
+          </h2>
+          <p className="mt-4 text-white/50 max-w-xl mx-auto">
+            Every primitive engineered to push the boundaries of on-chain finance.
+          </p>
+        </motion.div>
+
+        <div className="grid grid-cols-1 md:grid-cols-3 md:grid-rows-2 gap-4 md:gap-5 auto-rows-[220px]">
+          {features.map((f, i) => {
+            const Icon = f.icon;
+            return (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true, margin: '-50px' }}
+                transition={{ duration: 0.7, delay: i * 0.08 }}
+                whileHover={{ y: -4 }}
+                onMouseMove={(e) => {
+                  const r = e.currentTarget.getBoundingClientRect();
+                  const x = e.clientX - r.left;
+                  const y = e.clientY - r.top;
+                  const rx = ((y / r.height) - 0.5) * -8;
+                  const ry = ((x / r.width) - 0.5) * 8;
+                  e.currentTarget.style.transform = `perspective(1000px) rotateX(${rx}deg) rotateY(${ry}deg) translateY(-4px)`;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = '';
+                }}
+                className={`group relative rounded-3xl p-7 overflow-hidden border border-white/10 bg-white/[0.02] backdrop-blur-xl transition-all duration-300 hover:border-white/20 ${f.size}`}
+                style={{ transformStyle: 'preserve-3d', transition: 'transform 0.3s ease, border-color 0.3s ease' }}
+              >
+                <div className={`absolute inset-0 bg-gradient-to-br ${f.gradient} opacity-50 group-hover:opacity-100 transition-opacity`} />
+                <div 
+                  className="absolute -inset-px rounded-3xl opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none"
+                  style={{ 
+                    boxShadow: `inset 0 0 40px ${f.accent}40, 0 0 30px ${f.accent}30`,
+                  }}
+                />
+                <div className="relative h-full flex flex-col">
+                  <div 
+                    className="inline-flex w-12 h-12 rounded-xl items-center justify-center mb-auto border border-white/10 bg-black/40 backdrop-blur-md"
+                    style={{ boxShadow: `0 0 20px ${f.accent}50` }}
+                  >
+                    <Icon className="w-5 h-5" style={{ color: f.accent }} />
+                  </div>
+                  <div>
+                    <h3 className="text-xl md:text-2xl font-semibold mt-6 mb-2">{f.title}</h3>
+                    <p className="text-white/50 text-sm leading-relaxed">{f.desc}</p>
+                  </div>
+                </div>
+              </motion.div>
+            );
+          })}
+        </div>
+      </section>
+
+      {/* Visual Block */}
+      <section ref={visualRef} className="relative z-10 px-6 md:px-12 py-32 max-w-7xl mx-auto">
+        <div className="grid md:grid-cols-2 gap-12 items-center">
+          <motion.div
+            initial={{ opacity: 0, x: -40 }}
+            whileInView={{ opacity: 1, x: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.8 }}
+          >
+            <div className="text-xs uppercase tracking-[0.3em] text-blue-400 mb-4">Infrastructure</div>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tighter mb-6 leading-tight">
+              <span className="bg-gradient-to-r from-white to-white/60 bg-clip-text text-transparent">A new protocol</span>
+              <br />
+              <span className="bg-gradient-to-r from-blue-400 to-fuchsia-400 bg-clip-text text-transparent">for a new internet.</span>
+            </h2>
+            <p className="text-white/60 leading-relaxed mb-8 text-lg">
+              NEONEX is a modular, MEV-resistant execution layer that combines the throughput of centralized systems 
+              with the transparency of decentralized ones. Every trade settled on-chain in milliseconds.
+            </p>
+            <div className="space-y-3">
+              {[
+                { icon: Lock, text: 'Non-custodial architecture by default' },
+                { icon: Globe, text: 'Native interoperability across 40+ chains' },
+                { icon: TrendingUp, text: 'Real-time MEV protection on every trade' },
+              ].map((item, i) => {
+                const Ic = item.icon;
+                return (
+                  <motion.div 
+                    key={i}
+                    initial={{ opacity: 0, x: -20 }}
+                    whileInView={{ opacity: 1, x: 0 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: i * 0.1 }}
+                    className="flex items-center gap-3 text-white/80"
+                  >
+                    <div className="w-8 h-8 rounded-lg bg-white/5 border border-white/10 flex items-center justify-center">
+                      <Ic className="w-4 h-4 text-purple-400" />
+                    </div>
+                    <span className="text-sm">{item.text}</span>
+                  </motion.div>
+                );
+              })}
+            </div>
+          </motion.div>
+
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            whileInView={{ opacity: 1, scale: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 1 }}
+            style={{ x: smx, y: smy }}
+            className="relative aspect-square max-w-lg mx-auto"
+          >
+            {/* Stylized 3D abstract visual made with CSS */}
+            <div className="relative w-full h-full rounded-3xl overflow-hidden border border-white/10 backdrop-blur-xl bg-gradient-to-br from-purple-900/20 to-blue-900/20">
+              {/* Concentric rings */}
+              <motion.div 
+                className="absolute inset-0 flex items-center justify-center"
+                animate={{ rotate: 360 }}
+                transition={{ duration: 40, repeat: Infinity, ease: 'linear' }}
+              >
+                {[0.95, 0.8, 0.65, 0.5, 0.35].map((scale, i) => (
+                  <div 
+                    key={i}
+                    className="absolute rounded-full border"
+                    style={{ 
+                      width: `${scale * 100}%`,
+                      height: `${scale * 100}%`,
+                      borderColor: i % 2 ? 'rgba(168,85,247,0.3)' : 'rgba(59,130,246,0.3)',
+                      boxShadow: i % 2 ? '0 0 20px rgba(168,85,247,0.2)' : '0 0 20px rgba(59,130,246,0.2)',
+                    }}
+                  />
+                ))}
+              </motion.div>
+
+              {/* Counter rotating inner */}
+              <motion.div 
+                className="absolute inset-0 flex items-center justify-center"
+                animate={{ rotate: -360 }}
+                transition={{ duration: 25, repeat: Infinity, ease: 'linear' }}
+              >
+                <div className="w-1/2 h-1/2 rounded-full bg-gradient-conic from-blue-500 via-purple-500 to-fuchsia-500 blur-2xl opacity-60" 
+                  style={{ background: 'conic-gradient(from 0deg, #3b82f6, #a855f7, #d946ef, #3b82f6)' }}
+                />
+              </motion.div>
+
+              {/* Center orb */}
+              <div className="absolute inset-0 flex items-center justify-center">
+                <motion.div 
+                  className="w-24 h-24 rounded-full bg-gradient-to-br from-white to-purple-200"
+                  animate={{ 
+                    scale: [1, 1.1, 1],
+                    boxShadow: [
+                      '0 0 60px rgba(168,85,247,0.6)',
+                      '0 0 100px rgba(59,130,246,0.8)',
+                      '0 0 60px rgba(168,85,247,0.6)',
+                    ]
+                  }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                />
+              </div>
+
+              {/* Floating particles */}
+              {[...Array(20)].map((_, i) => (
+                <motion.div
+                  key={i}
+                  className="absolute w-1 h-1 rounded-full bg-white"
+                  style={{
+                    left: `${Math.random() * 100}%`,
+                    top: `${Math.random() * 100}%`,
+                  }}
+                  animate={{
+                    opacity: [0, 1, 0],
+                    scale: [0, 1.5, 0],
+                  }}
+                  transition={{
+                    duration: 2 + Math.random() * 3,
+                    repeat: Infinity,
+                    delay: Math.random() * 3,
+                  }}
+                />
+              ))}
+
+              {/* Corner markers */}
+              <div className="absolute top-4 left-4 text-[10px] font-mono text-white/40">NEONEX.CORE</div>
+              <div className="absolute top-4 right-4 text-[10px] font-mono text-purple-400/70">v3.0</div>
+              <div className="absolute bottom-4 left-4 text-[10px] font-mono text-white/40">40.7128°N</div>
+              <div className="absolute bottom-4 right-4 text-[10px] font-mono text-blue-400/70">● LIVE</div>
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* CTA Banner */}
+      <section className="relative z-10 px-6 md:px-12 py-20 max-w-7xl mx-auto">
+        <motion.div
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          transition={{ duration: 0.8 }}
+          className="relative rounded-3xl overflow-hidden border border-white/10 p-10 md:p-16 text-center bg-gradient-to-br from-blue-900/20 via-purple-900/20 to-fuchsia-900/10 backdrop-blur-xl"
+        >
+          <div className="absolute -top-40 left-1/2 -translate-x-1/2 w-[600px] h-[400px] bg-purple-600/30 blur-[120px] rounded-full" />
+          <div className="relative">
+            <h2 className="text-3xl md:text-5xl font-bold tracking-tighter mb-4 bg-gradient-to-r from-white to-white/70 bg-clip-text text-transparent">
+              Ready to rewire finance?
+            </h2>
+            <p className="text-white/60 max-w-xl mx-auto mb-8">
+              Join over 1.2 million traders building the decentralized future.
+            </p>
+            <motion.button 
+              whileHover={{ scale: 1.03 }}
+              whileTap={{ scale: 0.97 }}
+              className="relative inline-flex px-8 py-4 rounded-full bg-white text-black font-semibold items-center gap-2 group"
+            >
+              <Rocket className="w-4 h-4" />
+              Launch NEONEX
+              <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition" />
+            </motion.button>
+          </div>
+        </motion.div>
+      </section>
+
+      {/* Footer */}
+      <footer className="relative z-10 px-6 md:px-12 pt-16 pb-10 max-w-7xl mx-auto">
+        {/* Neon divider */}
+        <div className="relative h-px mb-12">
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-purple-500 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-transparent via-blue-400 to-transparent blur-md" />
+        </div>
+
+        <div className="grid md:grid-cols-4 gap-10 mb-12">
+          <div className="md:col-span-2">
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center shadow-[0_0_20px_rgba(139,92,246,0.5)]">
+                <Sparkles className="w-5 h-5" />
+              </div>
+              <span className="text-xl font-bold">NEONEX</span>
+            </div>
+            <p className="text-white/50 text-sm max-w-sm mb-6">
+              The future of decentralized finance. Built for speed, security, and the new generation.
+            </p>
+            <div className="flex gap-3">
+              {[Twitter, Github, Send].map((Icon, i) => (
+                <a key={i} href="#" className="w-9 h-9 rounded-full bg-white/5 border border-white/10 flex items-center justify-center hover:bg-white/10 hover:border-purple-500/40 transition">
+                  <Icon className="w-4 h-4" />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Product</h4>
+            <ul className="space-y-2 text-sm text-white/50">
+              <li><a href="#" className="hover:text-white transition">Exchange</a></li>
+              <li><a href="#" className="hover:text-white transition">Bridge</a></li>
+              <li><a href="#" className="hover:text-white transition">Staking</a></li>
+              <li><a href="#" className="hover:text-white transition">Analytics</a></li>
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-sm font-semibold mb-4">Stay in the loop</h4>
+            <p className="text-white/50 text-sm mb-3">Subscribe for alpha updates.</p>
+            <form onSubmit={(e) => e.preventDefault()} className="relative group">
+              <div className="flex items-center rounded-full border border-white/10 bg-white/5 backdrop-blur-md overflow-hidden focus-within:border-purple-500/50 transition">
+                <Mail className="w-4 h-4 text-white/40 ml-4" />
+                <input 
+                  type="email"
+                  placeholder="your@email.com"
+                  className="flex-1 bg-transparent px-3 py-3 text-sm outline-none placeholder:text-white/30"
+                />
+                <button className="mr-1 p-2 rounded-full bg-gradient-to-r from-blue-600 to-purple-600 hover:shadow-[0_0_20px_rgba(168,85,247,0.6)] transition">
+                  <ArrowRight className="w-4 h-4" />
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+
+        <div className="flex flex-col md:flex-row justify-between items-center gap-4 pt-8 border-t border-white/5">
+          <div className="text-xs text-white/40">
+            © 2025 NEONEX Labs. All rights reserved.
+          </div>
+          <div className="flex gap-6 text-xs text-white/40">
+            <a href="#" className="hover:text-white transition">Privacy</a>
+            <a href="#" className="hover:text-white transition">Terms</a>
+            <a href="#" className="hover:text-white transition">Security</a>
+          </div>
+        </div>
+      </footer>
+    </div>
+  );
+     }
